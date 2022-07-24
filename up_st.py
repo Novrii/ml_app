@@ -2,7 +2,7 @@ import cv2
 import streamlit as st
 import numpy as np
 
-import os, glob
+from PIL import Image
 
 import tensorflow as tf
 from keras import backend as K
@@ -51,26 +51,16 @@ def main_loop():
     st.subheader("This app allows you to recognize handwriting image !")
     st.text("We use Tensorflow, OpenCV and Streamlit for this demo")
 
-    #clean temp
-    print("delete file in directory temp/")
-    files = glob.glob('temp/*')
-    for f in files:
-        os.remove(f)
-
     model = tf.keras.models.load_model('temp_model/hrv1.h5')
 
     image_file = st.file_uploader("Upload Your Image", type=['jpg', 'png', 'jpeg'])
     if not image_file:
         return None
 
-    img_name = image_file.name
-    #save image
-    with open(os.path.join("temp/",img_name),"wb") as f: 
-        f.write(image_file.getbuffer())
-    st.success(f"Saved File {img_name}")
+    original_image = Image.open(image_file)
+    original_image = np.array(original_image)
 
-    img_dir = f"temp/{img_name}"
-    image = cv2.imread(img_dir, cv2.IMREAD_GRAYSCALE)
+    image = cv2.cvtColor(original_image, cv2.COLOR_BGR2GRAY)
 
     image = preprocess(image)
     image = image/255.
@@ -80,8 +70,8 @@ def main_loop():
                                        greedy=True)[0][0])
 
     st.text("Image Handwriting")
-    st.image([img_dir])
-    st.text(f"Recognize: {num_to_label(decoded[0])}")
+    st.image([image_file])
+    st.text(f"Result: {num_to_label(decoded[0])}")
 
 if __name__ == '__main__':
     main_loop()
