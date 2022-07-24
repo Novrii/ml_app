@@ -49,27 +49,45 @@ def num_to_label(num):
             ret+=alphabets[ch]
     return ret
 
-model = tf.keras.models.load_model('model/handwriting.model')
+model = tf.keras.models.load_model('model/handwriting.h5')
 
 # model.summary()
 
-test = pd.read_csv('label/written_name_test_v2.csv')
+# test = pd.read_csv('label/written_name_test_v2.csv')
+# D:\CODE\ml_app\test_v2\test\TEST_0001.jpg
 
-plt.figure(figsize=(15, 10))
-for i in range(6):
-    ax = plt.subplot(2, 3, i+1)
-    img_dir = 'test_v2/test/'+test.loc[i, 'FILENAME']
-    image = cv2.imread(img_dir, cv2.IMREAD_GRAYSCALE)
-    plt.imshow(image, cmap='gray')
+# plt.figure(figsize=(15, 10))
+# for i in range(6):
+#     ax = plt.subplot(2, 3, i+1)
+#     img_dir = 'test_v2/test/'+test.loc[i, 'FILENAME']
+#     image = cv2.imread(img_dir, cv2.IMREAD_GRAYSCALE)
+#     plt.imshow(image, cmap='gray')
 
-    # print(img_dir)
+#     # print(img_dir)
     
-    image = preprocess(image)
-    image = image/255.
-    pred = model.predict(image.reshape(1, 256, 64, 1))
-    decoded = K.get_value(K.ctc_decode(pred, input_length=np.ones(pred.shape[0])*pred.shape[1], 
-                                       greedy=True)[0][0])
-    plt.title(num_to_label(decoded[0]), fontsize=12)
-    plt.axis('off')
+#     image = preprocess(image)
+#     image = image/255.
+#     pred = model.predict(image.reshape(1, 256, 64, 1))
+#     decoded = K.get_value(K.ctc_decode(pred, input_length=np.ones(pred.shape[0])*pred.shape[1], 
+#                                        greedy=True)[0][0])
+#     print(num_to_label(decoded[0]))
+#     plt.title(num_to_label(decoded[0]), fontsize=12)
+#     plt.axis('off')
     
-plt.subplots_adjust(wspace=0.2, hspace=-0.8)
+# plt.subplots_adjust(wspace=0.2, hspace=-0.8)
+
+#tes 1 gambar
+
+img_dir = 'test_v2/test/TEST_0009.jpg'
+image = cv2.imread(img_dir, cv2.IMREAD_GRAYSCALE)
+# plt.imshow(image, cmap='gray')
+
+# print(img_dir)
+
+image = preprocess(image)
+image = image/255.
+pred = model.predict(image.reshape(1, 256, 64, 1))
+decoded = K.get_value(K.ctc_decode(pred, input_length=np.ones(pred.shape[0])*pred.shape[1], 
+                                    greedy=True)[0][0])
+print(num_to_label(decoded[0]))
+
