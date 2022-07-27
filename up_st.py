@@ -70,7 +70,7 @@ def main_loop():
                                        greedy=True)[0][0])
 
     st.text(f"Image Handwriting")
-    st.image([image])
+    st.image([image_file])
     st.text(f"Probably the result: {num_to_label(decoded[0])}")
 
 if __name__ == '__main__':
