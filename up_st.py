@@ -49,7 +49,7 @@ def num_to_label(num):
 def main_loop():
     st.title("Handwriting Recognition Demo App")
     st.subheader("This app allows you to recognize handwriting image !")
-    st.text("We use Tensorflow, OpenCV and Streamlit for this demo")
+    st.text("We use Tensorflow and Streamlit for this demo")
 
     model = tf.keras.models.load_model('temp_model/hrv1.h5')
 
@@ -69,9 +69,9 @@ def main_loop():
     decoded = K.get_value(K.ctc_decode(pred, input_length=np.ones(pred.shape[0])*pred.shape[1], 
                                        greedy=True)[0][0])
 
-    st.text("Image Handwriting")
-    st.image([image_file])
-    st.text(f"Result: {num_to_label(decoded[0])}")
+    st.text(f"Image Handwriting")
+    st.image([image])
+    st.text(f"Probably the result: {num_to_label(decoded[0])}")
 
 if __name__ == '__main__':
     main_loop()

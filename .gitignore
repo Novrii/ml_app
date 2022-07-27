@@ -2,6 +2,7 @@
 /test_v2
 /label
 /model
+/temp
 hr.py
 temp_up.py
 example.py
